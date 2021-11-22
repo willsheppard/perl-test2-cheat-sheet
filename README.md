@@ -7,27 +7,31 @@
 ```
 use Test2::V0;
 
-
+is( $got, $expect, $name, @diag );
 ```
 
-## Navigation
+## Audience
 
-  - regular users of Test2 (i.e. developers of other code) --> start at [Test2::Suite](https://metacpan.org/pod/Test2::Suite) and find user docs under Test2::Tools::\* namespace, e.g. [Test2::Tools::Compare](https://metacpan.org/pod/Test2::Tools::Compare)
+**Do you want to use Test2 to test your code?**
 
-  - if you want to extend the Test2 framework itself, i.e. write a new _type_ of test --> see [Test2::API](https://metacpan.org/pod/Test2::API) and the lower-level library docs, e.g. [Test2::Compare](https://metacpan.org/pod/Test2::Compare) (yes, it's confusing)
+ - start: [Test2::Suite](https://metacpan.org/pod/Test2::Suite)
+ - user docs: [Test2::Tools::Compare](https://metacpan.org/pod/Test2::Tools::Compare)
+
+**Do you want to extend the Test2 framework itself?**
+
+ - see: [Test2::API](https://metacpan.org/pod/Test2::API)
+ - maintenance docs: [Test2::Compare](https://metacpan.org/pod/Test2::Compare)
 
 ## Compare
 
 TODO:
 ```
 use Test2::Tools::Compare qw{
-    is like isnt unlike
     match mismatch validator
     hash array bag object meta number float rounded within string subset bool
     in_set not_in_set check_set
     item field call call_list call_hash prop check all_items all_keys all_vals all_values
     etc end filter_items
-    T F D DF E DNE FDNE U L
     event fail_events
     exact_ref
 };
@@ -40,11 +44,107 @@ is(
     $some_hash,
     hash {
         field a => 1;
-        field b => 2;
-        field c => 3;
+        field b => match(qr/[0-9]+/);
     },
-    "Hash matches spec"
+    "message"
 );
+```
+
+### isnt
+
+```
+isnt( $got, $expect, $name );
+```
+
+### like
+
+```
+like(
+    $some_hash,
+    {
+        a => 1,
+        b => qr/[0-9]+/,
+    },
+    "message"
+);
+```
+
+### unlike
+
+```
+unlike( $got, $expect, $name );
+```
+
+### T
+
+Assert the value is true.
+
+```
+is( $foo, T(), '$foo has a true value' );
+```
+
+### F
+
+Assert the value is false. And that the key exists, if used in a hash
+
+```
+is($foo, F(), '$foo exists (if key in hash) and has a false value');
+```
+
+### D
+
+Assert the value is defined.
+
+```
+is('foo', D(), 'foo is defined');
+```
+
+### U
+
+Assert the value is undefined.
+
+```
+is(undef, U(), 'not defined');
+```
+
+### DF
+
+Assert the value is defined and false.
+
+is(0, DF(), 'foo is defined but false');
+
+### E
+
+Assert the value exists in an array, or key exists in a hash.
+
+```
+is( ['a', 'b', undef], ['a', 'b', E() ], "There is a third item in the array" );
+is( {a => 1, b => 2}, {a => 1, b => E() }, "The 'b' key exists in the hash") ;
+```
+
+### DNE
+
+Assert the value does not exist, or check end bound of an array.
+
+```
+is( ['a', 'b'], ['a', 'b', DNE()], "There is no third item in the array" );
+is( {a => 1}, {a => 1, b => DNE()}, "The 'b' key does not exist in the hash" );
+```
+
+### FDNE
+
+Combination of F() and DNE().
+
+```
+check = FDNE();
+```
+
+### L
+
+Assert value is defined and has non-zero length.
+
+```
+$check = L();
 ```
 
 ## Misc
