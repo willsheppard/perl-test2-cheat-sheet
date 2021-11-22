@@ -56,7 +56,7 @@ is(
 isnt( $got, $expect, $name );
 ```
 
-### like
+### like
 
 ```
 like(
@@ -99,7 +99,7 @@ Assert the value is defined.
 is('foo', D(), 'foo is defined');
 ```
 
-### U
+### U
 
 Assert the value is undefined.
 
@@ -113,7 +113,7 @@ Assert the value is defined and false.
 
 is(0, DF(), 'foo is defined but false');
 
-### E
+### E
 
 Assert the value exists in an array, or key exists in a hash.
 
@@ -147,7 +147,7 @@ Assert value is defined and has non-zero length.
 $check = L();
 ```
 
-## Misc
+## Misc
 
 ### Target
 
